@@ -1,0 +1,186 @@
+.default-object {
+    display: inline;
+    margin: 50px 20px 40px 30px;
+    /* width: 400px; */
+    padding-right: 40px;
+    height: 50px;
+    background: greenyellow;
+    border: 1px solid;
+}
+
+.default-object:hover {
+    background-color: aqua;
+    padding-right: 80px;
+    transition: 0.3s;
+}
+
+/* app.component.css */
+.tooltip {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+  }
+  
+  .tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%; /* Vị trí tooltip */
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  
+  .tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+  
+  .container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 10px;
+    padding: 20px;
+  }
+
+  .item-wrapper {
+    position: relative;
+    width: 22%;
+    height: 150px;
+    display: flex;
+  }
+
+  .item {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-color: #3498db;
+    border-radius: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    
+  }
+
+  .item-wrapper:hover .item {
+    
+    /* transform: scale(1.2,1);  Phóng to item */
+    /* box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); Hiệu ứng đổ bóng cho item */
+  }
+
+
+  .item p {
+    text-align: center;
+    color: white;
+    padding-top: 60px;
+    font-size: 18px;
+    position: relative;
+    /* z-index: 3; Nội dung luôn hiển thị trên cùng */
+  }
+
+  /* Popup nằm trong item-wrapper */
+  .popup {
+    position: absolute;
+    top: 0;
+    left: 100%;
+    width: 0;
+    height: 100%;
+    display: none;
+    border-radius: 10px;
+    z-index: 3; /* Popup có z-index thấp hơn item */
+  }
+
+  .popup-content {
+    width: 66.666%;
+    height: 100%;
+    background-color: #3498db;
+    border-radius: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .desc-popup {
+    width: 33.3333%;
+    border: #3498db;
+    padding: 8px;
+    background-color: aliceblue;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+
+    /* Các thuộc tính để ngắt dòng và hiển thị dấu ba chấm */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 8; /* Số lượng dòng hiển thị trước khi cắt */
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Khi hover, popup sẽ mở rộng nhưng nằm dưới item */
+  .item-wrapper:hover .popup {
+    display: flex;
+    width: 150%; /* Phình to ra phía bên phải */
+    left: 0px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.8);
+  }
+
+
+  .item-wrapper:nth-child(4n):hover .popup {
+    width: 150%; /* Mở rộng về phía bên trái */
+    position: absolute;
+    left: auto;
+    right: 0px;
+    display: flex;
+    flex-direction: row-reverse;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .item-wrapper:nth-child(4n):hover .popup > .desc-popup {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+
+  }
+
+  @media (max-width: 768px) {
+    .item-wrapper {
+      width: 45%;
+    }
+
+    /* Popup mở rộng về bên trái nếu item ở biên phải */
+    .item-wrapper:nth-child(2n) .popup {
+      position: absolute;
+      left: auto;
+      right: 10px;
+    }
+
+    .item-wrapper:nth-child(2nn):hover .popup > .desc-popup {
+      border-top-left-radius: 10px;
+      border-bottom-left-radius: 10px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .item-wrapper {
+      width: 100%;
+    }
+
+    /* Trên điện thoại, popup mở rộng đều cả hai bên */
+    .popup {
+      left: 0;
+      right: 0;
+      width: 0;
+      margin: auto;
+    }
+
+    .item-wrapper:hover .popup {
+      width: 150%;
+    }
+  }

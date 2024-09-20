@@ -1,0 +1,15 @@
+<div class="container">
+  <div class="item-wrapper" *ngFor="let it of arr">
+      <div class="item">
+        <img [src]="it.url" alt="" style="width: 100%; height: 100%;">
+      </div>
+      <div class="popup">
+          <div class="popup-content">
+            <img [src]="it.url" alt="" style="width: 100%; height: 100%;">
+          </div>
+          <div class="desc-popup">
+            {{it.desc.name}}
+          </div> 
+      </div>
+  </div>
+</div>

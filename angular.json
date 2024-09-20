@@ -24,12 +24,18 @@
               {
                 "glob": "**/*",
                 "input": "public"
-              }
+              },
+              "src/manifest.json",
+              "src/firebase-messaging-sw.js",
+              "src/service-worker.js"
             ],
             "styles": [
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [
+
+            ],
+            "serviceWorker": false
           },
           "configurations": {
             "production": {
@@ -45,7 +51,10 @@
                   "maximumError": "4kB"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true
             },
             "development": {
               "optimization": false,
@@ -92,5 +101,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "aefafe17-b93d-4412-bb85-a7f12906968e"
   }
 }

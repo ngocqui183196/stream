@@ -1,0 +1,13 @@
+<p>chat works!</p>
+
+
+<button (click)="wsConect()">connect</button> <button (click)="disconect()">Disconect</button>
+<div *ngFor="let item of messages">
+  <div>{{item | json}}</div>
+</div>
+
+<form (submit)="sendMessage(form)" [formGroup]="form">
+  <input type="text" formControlName="message">
+  <button 
+  style="border: aqua; cursor: pointer;background: blueviolet;" type="submit">send mess</button>
+</form>
