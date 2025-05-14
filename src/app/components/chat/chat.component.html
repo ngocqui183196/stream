@@ -11,3 +11,26 @@
   <button 
   style="border: aqua; cursor: pointer;background: blueviolet;" type="submit">send mess</button>
 </form>
+
+
+<div>
+  <h1>Chat: Nhận Luồng Video</h1>
+
+  <div *ngIf="errorMessage" style="color: red; margin-bottom: 10px;">
+    {{ errorMessage }}
+  </div>
+
+  <label for="clients">Danh sách client:</label>
+  <select id="clients">
+    <option *ngFor="let client of clients" [value]="client">
+      {{ client }}
+    </option>
+  </select>
+
+  <div>
+    <button (click)="stopVideo()">Dừng Video</button>
+  </div>
+
+  <h3>Video Từ Media</h3>
+  <video #remoteVideo id="remoteVideo" autoplay playsinline style="width: 320px;"></video>
+</div>

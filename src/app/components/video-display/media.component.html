@@ -1,0 +1,29 @@
+<div [formGroup]="formGroup">
+  <h1>Media: Gửi Luồng Webcam</h1>
+  <div *ngIf="errorMessage" style="color: red; margin-bottom: 10px;">
+    {{ errorMessage }}
+  </div>
+
+  <label for="videoDevices">Chọn webcam:</label>
+  <select id="videoDevices" formControlName="selectedVideoDeviceId">
+    <option *ngFor="let device of videoDevices" [value]="device.deviceId">
+      {{ device.label || 'Webcam ' + device.deviceId }}
+    </option>
+  </select>
+
+  <label for="clients">Chọn client để gửi video:</label>
+  <select id="clients" formControlName="selectedClientId">
+    <option *ngFor="let client of clients" [value]="client">
+      {{ client }}
+    </option>
+  </select>
+
+  <div>
+    <button (click)="startVideo()">Bắt đầu Video</button>
+    <button (click)="callClient()">Gọi</button>
+    <button (click)="stopVideo()">Dừng Video</button>
+  </div>
+
+  <h3>Video Cục bộ</h3>
+  <video #localVideo id="localVideo" autoplay playsinline style="width: 320px;"></video>
+</div>
