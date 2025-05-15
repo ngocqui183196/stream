@@ -1,0 +1,47 @@
+<div>
+  <h2>Video Call (Many-to-Many)</h2>
+  <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+
+  <div>
+    <label>Chọn thiết bị video:</label>
+    <select [formControl]="selectedVideoDeviceId">
+      <option *ngFor="let device of videoDevices" [value]="device.deviceId">
+        {{ device.label || 'Camera ' + device.deviceId }}
+      </option>
+    </select>
+  </div>
+
+  <div>
+    <h3>Clients hiện tại:</h3>
+    <ul>
+      <li *ngFor="let client of clients">{{ client }}</li>
+    </ul>
+  </div>
+
+  <button (click)="wsConnect()">Kết Nối</button>
+  <button (click)="disconnect()">Ngắt Kết Nối</button>
+  <button (click)="startVideo()">Bật Video</button>
+  <button (click)="stopVideo()">Tắt Video</button>
+
+  <div class="video-container">
+    <div>
+      <h3>Video của bạn</h3>
+      <video #localVideo autoplay playsinline muted></video>
+    </div>
+    <div *ngFor="let remoteStream of streams" class="remote-video">
+      <h3>Video từ {{ remoteStream.clientId }}</h3>
+      <video [srcObject]="remoteStream.stream" autoplay playsinline></video>
+    </div>
+  </div>
+
+  <div>
+    <h3>Chat</h3>
+   <div *ngFor="let msg of messages">
+      <div>{{msg | json}}</div>
+   </div>
+    <form [formGroup]="form" (ngSubmit)="sendMessage(form)">
+      <input type="text" formControlName="message" placeholder="Nhập tin nhắn" />
+      <button type="submit">Gửi</button>
+    </form>
+  </div>
+</div>

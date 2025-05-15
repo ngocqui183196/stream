@@ -1,0 +1,15 @@
+.video-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.remote-video {
+  width: 320px;
+}
+video {
+  width: 100%;
+  border: 1px solid #ccc;
+}
+.error {
+  color: red;
+}

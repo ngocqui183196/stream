@@ -55,7 +55,6 @@ export class WebSocketService {
 
     // Nhận response (dành cho debug hoặc chat text nếu cần)
     this.socket.on('listenMessage', (msg: any) => {
-      console.log(msg)
       this.messages$.next(msg);
     });
   }

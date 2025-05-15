@@ -5,6 +5,7 @@ import {NotificationComponent} from "./components/notification/notification.comp
 import { RemintonComponent } from './components/reminton/reminton.component';
 import { HomeComponent } from './components/change-detection/home/home.component';
 import { MediaComponent } from './components/video-display/media.component';
+import { VideoCallComponent } from './components/video-call/video-call.component';
 
 export const routes: Routes = [
   {
@@ -30,5 +31,9 @@ export const routes: Routes = [
   {
     path: 'media',
     component: MediaComponent
+  },
+  {
+    path: 'call',
+    component: VideoCallComponent
   }
 ];
