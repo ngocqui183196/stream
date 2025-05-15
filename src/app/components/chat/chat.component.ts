@@ -52,9 +52,9 @@ export class ChatComponent implements AfterViewInit, OnDestroy {
     this.subscriptions.push(
       this.wsService.getMessages().subscribe(msg => {
         if (typeof msg === 'object' && !!msg.clientId) {
-
-          const newData = [...this.messages, msg]
-          this.messages = newData;
+          const newData = [msg, ...this.messages ]
+          const [ msg1, msg2, msg3, msg4, msg5, msg6, msg7, ...Rest] = newData;
+          this.messages = [msg1, msg2, msg3, msg4, msg5, msg6, msg7];
         }
       })
     );
