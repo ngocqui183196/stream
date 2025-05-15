@@ -1,69 +1,119 @@
-import {Injectable, OnInit} from '@angular/core';
+import { Injectable } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
-import {BehaviorSubject, Observable, ReplaySubject, Subject, take} from "rxjs";
+import { BehaviorSubject, Observable, ReplaySubject, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class WebSocketService implements OnInit{
+export class WebSocketService {
   private socket: Socket;
-  message: any;
-
-  user$ = new BehaviorSubject('');
-  messages$ = new ReplaySubject(4);
+  private user$ = new BehaviorSubject<string>('');
+  private messages$ = new ReplaySubject<any>(4);
+  private offer$ = new Subject<any>();
+  private answer$ = new Subject<any>();
+  private iceCandidate$ = new Subject<any>();
 
   constructor() {
+    // Kết nối tới server socket.io
+    this.socket = io('http://localhost:4500', {
+      transports: ['websocket'],
+      reconnection: true,
+      reconnectionAttempts: 5
+    });
 
-    // Kết nối tới WebSocket server tại cổng 4500
-    this.socket = io('ws://localhost:4500', {transports: ['websocket']});
-    console.log(this.socket.connected)
     this.socket.on('connect', () => {
-      console.log('Connected to server');
-      // this.socket.emit('message', 'Hello from client');
+      console.log('Connected to Socket.IO server:', this.socket.id);
     });
 
-    this.socket.on('message', (message: string) => {
-      console.log('Received:', message);
-      this.socket.emit('message',)
-      // this.message = message;
+    this.socket.on('connect_error', (error) => {
+      console.error('Socket connection error:', error);
     });
 
+    // Nhận client ID
+    this.socket.on('user', (clientId: string) => {
+      this.user$.next(clientId);
+    });
+
+    // Nhận thông báo ngắt kết nối
+    this.socket.on('userDisconnected', (clientId: string) => {
+      this.user$.next(clientId); // Có thể dùng Subject riêng nếu cần
+    });
+
+    // Nhận signaling messages
+    this.socket.on('offer', (data: any) => {
+      this.offer$.next(data);
+    });
+
+    this.socket.on('answer', (data: any) => {
+      this.answer$.next(data);
+    });
+
+    this.socket.on('icecandidate', (data: any) => {
+      console.log('Received ICE candidate:', data);
+      this.iceCandidate$.next(data);
+    });
+
+    // Nhận response (dành cho debug hoặc chat text nếu cần)
     this.socket.on('response', (msg: any) => {
-      console.log('Received response:', msg);
-      this.messages$.next(msg)
+      this.messages$.next(msg);
     });
-
-    this.socket.on('disconnect', () => {
-      console.log('Disconnected from server');
-    });
-
-    this.socket.on('user', (data: string) => {
-      this.user$.next(data)
-    })
   }
 
-
-  ngOnInit() {
-  }
-  // getUserId(): Observable<string> {
-  //   return this.user$.asObservable();
-  // }
-
-  sendMessage(message: any) {
-    // console.log(message)
-    this.socket.emit('message', message);
+  // Lấy socket instance
+  getSocket(): Socket {
+    return this.socket;
   }
 
-  onMessage(callback: (message: string) => void) {
-    this.socket.on('message', callback);
+  // Observable cho client ID
+  getUserId(): Observable<string> {
+    return this.user$.asObservable();
   }
 
-  disconnect() {
+  // Observable cho messages (debug hoặc chat text)
+  getMessages(): Observable<any> {
+    return this.messages$.asObservable();
+  }
+
+  // Observable cho signaling
+  onOffer(): Observable<any> {
+    return this.offer$.asObservable();
+  }
+
+  onAnswer(): Observable<any> {
+    return this.answer$.asObservable();
+  }
+
+  onIceCandidate(): Observable<any> {
+    return this.iceCandidate$.asObservable();
+  }
+
+  // Gửi signaling messages
+  sendOffer(offer: any, to: string): void {
+    this.socket.emit('offer', { offer, to });
+  }
+
+  sendAnswer(answer: any, to: string): void {
+    this.socket.emit('answer', { answer, to });
+  }
+
+  sendIceCandidate(candidate: any, to: string): void {
+    this.socket.emit('icecandidate', { candidate, to });
+  }
+
+  // Gửi message chung (dành cho debug hoặc chat text)
+  sendMessage(message: any): void {
+    this.socket.emit('response', message);
+  }
+
+  // Kết nối lại nếu cần
+  connect(): void {
+    if (!this.socket.connected) {
+      this.socket.connect();
+    }
+  }
+
+  // Ngắt kết nối
+  disconnect(): void {
     this.socket.disconnect();
-  }
-
-  connect() {
-    this.socket.connect()
-    this.socket.open()
   }
 }
