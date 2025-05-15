@@ -66,17 +66,11 @@ this.formGroup = this.fb.group({
       })
     );
 
-    // Lắng nghe client ngắt kết nối
+    // Lắng nghe client ID disconnect
     this.subscriptions.push(
-      this.wsService.getMessages().subscribe((msg: string = '') => {
-        console.log(msg);
-
-        if (typeof msg === 'string' && msg.includes('disconect')) {
-          if (msg) {
-            const clientId = msg.slice(5, 25);
-            this.clients = this.clients.filter(id => id !== clientId);
-          }
-        }
+      this.wsService.getUserIdDisconnect().subscribe((mes: any) => {
+        const clientId = mes.slice(5, 25);
+        this.clients = this.clients.filter(clientIdOnline => clientId != clientIdOnline);
       })
     );
 

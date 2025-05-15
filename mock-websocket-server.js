@@ -51,8 +51,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('disconnect', () => {
-    io.emit('disconnect', `User ${socket.id} disconect from server`)
-    console.log('Client disconnected:', socket.id);
+    io.emit('clientDisconnect', `User ${socket.id} disconect from server`)
   });
 });
 

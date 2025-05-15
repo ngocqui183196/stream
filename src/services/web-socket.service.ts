@@ -8,6 +8,7 @@ import { BehaviorSubject, Observable, ReplaySubject, Subject } from 'rxjs';
 export class WebSocketService {
   private socket: Socket;
   private user$ = new BehaviorSubject<string>('');
+  private userDisconnect$ = new BehaviorSubject<string>('');
   private messages$ = new ReplaySubject<any>(4);
   private offer$ = new Subject<any>();
   private answer$ = new Subject<any>();
@@ -57,6 +58,10 @@ export class WebSocketService {
     this.socket.on('listenMessage', (msg: any) => {
       this.messages$.next(msg);
     });
+
+    this.socket.on('clientDisconnect', (payload: any) => {
+      this.userDisconnect$.next(payload)
+    })
   }
 
   // Lấy socket instance
@@ -67,6 +72,11 @@ export class WebSocketService {
   // Observable cho client ID
   getUserId(): Observable<string> {
     return this.user$.asObservable();
+  }
+
+  // Observable cho client ID disconnect
+  getUserIdDisconnect(): Observable<string> {
+    return this.userDisconnect$.asObservable();
   }
 
   // Observable cho messages (debug hoặc chat text)
