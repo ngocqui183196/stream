@@ -12,12 +12,12 @@ const io
 io.on('connection', (socket) => {
   console.log('SERVER IS RUN')
   console.log('Client connected:', socket.id);
-  io.emit('user', socket.id)
+  io.emit('user', socket.id);
 
   // Xử lý signaling messages
   socket.on('offer', (data) => {
     console.log('Received offer from:', socket.id);
-    
+
     // Gửi offer đến client đích
     io.to(data.to).emit('offer', { ...data, from: socket.id });
   });
@@ -32,19 +32,13 @@ io.on('connection', (socket) => {
     io.to(data.to).emit('icecandidate', { ...data, from: socket.id });
   });
 
-  socket.on('message', (message) => {
-    console.log('Received:', message);
-
+  socket.on('sendMessage', (payload) => {
     // Gửi phản hồi lại client
     // socket.emit('response', message);
 
     // PHát cho tất cả các client
-    io.emit('response', message);
+    io.emit('listenMessage', payload);
   });
-
-  // socket.on('icecandidate', (data) => {
-  //   io.emit('icecandidate', data)
-  // })
 
   socket.on('disconnect', () => {
     io.emit('response', `User ${socket.id} disconect from server`)

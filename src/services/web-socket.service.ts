@@ -54,7 +54,8 @@ export class WebSocketService {
     });
 
     // Nhận response (dành cho debug hoặc chat text nếu cần)
-    this.socket.on('response', (msg: any) => {
+    this.socket.on('listenMessage', (msg: any) => {
+      console.log(msg)
       this.messages$.next(msg);
     });
   }
@@ -89,6 +90,7 @@ export class WebSocketService {
 
   // Gửi signaling messages
   sendOffer(offer: any, to: string): void {
+    console.log('send offer')
     this.socket.emit('offer', { offer, to });
   }
 
@@ -102,7 +104,8 @@ export class WebSocketService {
 
   // Gửi message chung (dành cho debug hoặc chat text)
   sendMessage(message: any): void {
-    this.socket.emit('response', message);
+    const data = { message, clientId: this.socket.id}
+    this.socket.emit('sendMessage', data);
   }
 
   // Kết nối lại nếu cần

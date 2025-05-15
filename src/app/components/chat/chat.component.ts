@@ -1,6 +1,6 @@
 import { Component, ElementRef, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, FormsModule } from '@angular/forms';
+import {FormBuilder, FormGroup, FormsModule, Validators} from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { WebSocketService } from '../../../services/web-socket.service';
 
@@ -16,7 +16,7 @@ export class ChatComponent implements AfterViewInit, OnDestroy {
   errorMessage: string = '';
   private peerConnection: RTCPeerConnection | null = null;
   private subscriptions: Subscription[] = [];
-  messages = [];
+  messages: any[] = [];
 
   form: FormGroup;
 
@@ -25,7 +25,7 @@ export class ChatComponent implements AfterViewInit, OnDestroy {
     private fb: FormBuilder
   ) {
     this.form = this.fb.group({
-      message: [''],
+      message: ['', Validators.required],
 
     })
   }
@@ -48,12 +48,13 @@ export class ChatComponent implements AfterViewInit, OnDestroy {
       })
     );
 
-    // Lắng nghe client ngắt kết nối
+    // Lắng nghe client sendMess
     this.subscriptions.push(
       this.wsService.getMessages().subscribe(msg => {
-        if (typeof msg === 'string' && msg.includes('disconect')) {
-          const clientId = msg.slice(5, 25);
-          this.clients = this.clients.filter(id => id !== clientId);
+        if (typeof msg === 'object' && !!msg.clientId) {
+
+          const newData = [...this.messages, msg]
+          this.messages = newData;
         }
       })
     );
@@ -61,8 +62,7 @@ export class ChatComponent implements AfterViewInit, OnDestroy {
     // Lắng nghe offer từ /media
     this.subscriptions.push(
       this.wsService.onOffer().subscribe(async (data: any) => {
-        console.log('here');
-        
+
         this.peerConnection = new RTCPeerConnection();
         this.peerConnection.ontrack = (event) => {
           if (this.remoteVideoRef) {
@@ -125,6 +125,8 @@ export class ChatComponent implements AfterViewInit, OnDestroy {
   }
 
   sendMessage(form: any) {
-    console.log(form);
+    form.get('message')?.setValue((form.get('message')?.value).trim())
+    if (form.get('message')?.invalid) return
+    this.wsService.sendMessage(form.get('message')?.value)
   }
 }

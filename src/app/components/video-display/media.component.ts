@@ -33,7 +33,7 @@ this.formGroup = this.fb.group({
 })
 
     this.formGroup.get('selectedClientId')?.valueChanges.subscribe(val => console.log(val));
-  
+
   }
 
   async ngAfterViewInit(): Promise<void> {
@@ -70,7 +70,7 @@ this.formGroup = this.fb.group({
     this.subscriptions.push(
       this.wsService.getMessages().subscribe((msg: string = '') => {
         console.log(msg);
-        
+
         if (typeof msg === 'string' && msg.includes('disconect')) {
           if (msg) {
             const clientId = msg.slice(5, 25);
@@ -97,12 +97,12 @@ this.formGroup = this.fb.group({
     this.subscriptions.push(
       this.wsService.onIceCandidate().subscribe(async (data: any) => {
         console.log(data);
-        
+
         if (!this.peerConnection) return;
         try {
           await this.peerConnection.addIceCandidate(new RTCIceCandidate(data.candidate));
           console.log('Vao day');
-          
+
         } catch (error: any) {
           this.errorMessage = 'Lỗi khi xử lý ICE candidate: ' + error.message;
           console.error('Lỗi khi xử lý ICE candidate:', error);
@@ -149,7 +149,6 @@ this.formGroup = this.fb.group({
   }
 
   async callClient(): Promise<void> {
-    debugger
     if (!this.peerConnection || !this.formGroup.get('selectedClientId')?.value) {
       this.errorMessage = 'Vui lòng chọn client và khởi động video trước khi gọi.';
       return;
@@ -161,9 +160,9 @@ this.formGroup = this.fb.group({
       if (this.formGroup.get('selectedClientId')?.value) {
         this.wsService.sendOffer(offer, this.formGroup.get('selectedClientId')?.value);
       console.log('vaod ayu');
-      
+
       } else return;
-      
+
     } catch (error: any) {
       this.errorMessage = 'Lỗi khi tạo offer: ' + error.message;
       console.error('Lỗi khi gọi:', error);
