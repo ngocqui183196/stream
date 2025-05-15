@@ -8,7 +8,7 @@ import { WebSocketService } from "../services/web-socket.service";
 import { BrowserModule } from "@angular/platform-browser";
 import { ReactiveFormsModule } from "@angular/forms";
 import { NotificationComponent } from "./components/notification/notification.component";
-import { messaging } from "../configs/firebase.config";
+// import { messaging } from "../configs/firebase.config";
 import { NotificationService } from "../apis/notification.service";
 import { HttpClientModule } from "@angular/common/http";
 import { TooltipDirective } from "./tooltip.directive";
@@ -30,7 +30,7 @@ import { RemintonComponent } from "./reminton/reminton.component";
   ],
   providers: [
     WebSocketService,
-    { provide: 'messaging', useValue: messaging},
+    // { provide: 'messaging', useValue: messaging},
     NotificationService,
     // TooltipDirective
   ],
