@@ -1,5 +1,6 @@
 import {Component, inject, OnInit} from '@angular/core';
 // import { messaging } from '../../../configs/firebase.config';
+import { AngularFireMessaging } from '@angular/fire/compat/messaging';
 import { environment } from '../../../environments/environment';
 import { NotificationService } from "../../../apis/notification.service";
 

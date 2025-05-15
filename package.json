@@ -21,7 +21,7 @@
     "@angular/router": "18.2.13",
     "@angular/service-worker": "18.2.13",
     "firebase": "^10.12.2",
-    "firebase-admin": "^12.1.1",
+    "firebase-admin": "^12.7.0",
     "rxjs": "~7.8.0",
     "socket.io": "^4.7.5",
     "socket.io-client": "^4.7.5",
